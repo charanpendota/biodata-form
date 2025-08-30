@@ -16,6 +16,7 @@
             --bg-light: #f4f7f9; /* Soft light gray */
             --card-bg: #ffffff;
             --border-color: #d1d8e0;
+            --success-color: #28a745;
         }
 
         body {
@@ -136,6 +137,41 @@
 
         button:active {
             transform: translateY(0);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submit-btn {
+            background-color: var(--success-color);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #218838;
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         /* Biodata Preview Styles */
@@ -362,10 +398,19 @@
 <div class="container">
     <div class="form-container">
         <h2>Biodata Form</h2>
+        
+        <!-- Success/Error Messages -->
+        <div id="successMessage" class="message success-message">
+            Form submitted successfully! Thank you for your submission.
+        </div>
+        <div id="errorMessage" class="message error-message">
+            There was an error submitting the form. Please try again.
+        </div>
+        
         <form id="biodataForm">
             <div class="form-group">
                 <label for="caste">Caste:</label>
-                <select id="caste">
+                <select id="caste" name="caste" required>
                     <option value="">Select Caste</option>
                     <option value="Reddy">Reddy</option>
                     <option value="Kamma">Kamma</option>
@@ -380,7 +425,7 @@
             
             <div class="form-group">
                 <label for="gender">Gender:</label>
-                <select id="gender">
+                <select id="gender" name="gender" required>
                     <option value="">Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -389,18 +434,18 @@
             
             <div class="form-group">
                 <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName">
+                <input type="text" id="fullName" name="fullName" required>
             </div>
 
             <div class="form-group">
                 <label for="dob">Date of Birth:</label>
-                <input type="date" id="dob">
+                <input type="date" id="dob" name="dob" required>
             </div>
 
             <div class="form-group">
                 <label>Time of Birth:</label>
                 <div class="time-select-group">
-                    <select id="tobHour">
+                    <select id="tobHour" name="tobHour">
                         <option value="">Hour</option>
                         <script>
                             for (let i = 1; i <= 12; i++) {
@@ -408,7 +453,7 @@
                             }
                         </script>
                     </select>
-                    <select id="tobMinute">
+                    <select id="tobMinute" name="tobMinute">
                         <option value="">Minute</option>
                         <script>
                             for (let i = 0; i < 60; i++) {
@@ -417,7 +462,7 @@
                             }
                         </script>
                     </select>
-                    <select id="tobAmPm">
+                    <select id="tobAmPm" name="tobAmPm">
                         <option value="">AM/PM</option>
                         <option value="AM">AM</option>
                         <option value="PM">PM</option>
@@ -427,12 +472,12 @@
 
             <div class="form-group">
                 <label for="pob">Place of Birth:</label>
-                <input type="text" id="pob">
+                <input type="text" id="pob" name="pob">
             </div>
 
             <div class="form-group">
                 <label for="rashiCombined">Rashi:</label>
-                <select id="rashiCombined">
+                <select id="rashiCombined" name="rashiCombined">
                     <option value="">Select Rashi</option>
                     <option value="Aries (Mesha) / మేషం">Aries (Mesha) / మేషం</option>
                     <option value="Taurus (Vrushabha) / వృషభం">Taurus (Vrushabha) / వృషభం</option>
@@ -451,7 +496,7 @@
 
             <div class="form-group">
                 <label for="nakshatraCombined">Nakshatra:</label>
-                <select id="nakshatraCombined">
+                <select id="nakshatraCombined" name="nakshatraCombined">
                     <option value="">Select Nakshatra</option>
                     <option value="Ashwini (అశ్విని)">Ashwini (అశ్విని)</option>
                     <option value="Bharani (భరణి)">Bharani (భరణి)</option>
@@ -485,12 +530,12 @@
 
             <div class="form-group">
                 <label for="gotra">Gotra:</label>
-                <input type="text" id="gotra">
+                <input type="text" id="gotra" name="gotra">
             </div>
 
             <div class="form-group">
                 <label for="height">Height:</label>
-                <select id="height">
+                <select id="height" name="height">
                     <option value="">Select Height</option>
                     <script>
                         for (let feet = 4; feet <= 7; feet++) {
@@ -506,7 +551,7 @@
 
             <div class="form-group">
                 <label for="complexion">Complexion:</label>
-                <select id="complexion">
+                <select id="complexion" name="complexion">
                     <option value="">Select Complexion</option>
                     <option value="Very Fair">Very Fair</option>
                     <option value="Fair">Fair</option>
@@ -517,22 +562,22 @@
 
             <div class="form-group">
                 <label for="education">Education:</label>
-                <input type="text" id="education">
+                <input type="text" id="education" name="education">
             </div>
 
             <div class="form-group">
                 <label for="jobDetails">Job Details:</label>
-                <textarea id="jobDetails" rows="3" placeholder="e.g., Global Clinical Operations Specialist, Clinical Trials"></textarea>
+                <textarea id="jobDetails" name="jobDetails" rows="3" placeholder="e.g., Global Clinical Operations Specialist, Clinical Trials"></textarea>
             </div>
             
             <div class="form-group">
                 <label for="jobLocation">Job Location:</label>
-                <input type="text" id="jobLocation" placeholder="e.g., Hyderabad, India">
+                <input type="text" id="jobLocation" name="jobLocation" placeholder="e.g., Hyderabad, India">
             </div>
 
             <div class="form-group">
                 <label for="salary">Salary (LPA):</label>
-                <select id="salary">
+                <select id="salary" name="salary">
                     <option value="">Select Salary</option>
                     <script>
                         for (let i = 3; i <= 20; i++) {
@@ -545,52 +590,53 @@
 
             <div class="form-group">
                 <label for="requiredQualities">Required Qualities:</label>
-                <textarea id="requiredQualities" rows="3" placeholder="e.g., Should be a working professional, Good family background"></textarea>
+                <textarea id="requiredQualities" name="requiredQualities" rows="3" placeholder="e.g., Should be a working professional, Good family background"></textarea>
             </div>
 
             <div class="form-group">
                 <label for="fatherName">Father's Name:</label>
-                <input type="text" id="fatherName">
+                <input type="text" id="fatherName" name="fatherName">
             </div>
 
             <div class="form-group">
                 <label for="fatherOccupation">Father's Occupation:</label>
-                <input type="text" id="fatherOccupation">
+                <input type="text" id="fatherOccupation" name="fatherOccupation">
             </div>
 
             <div class="form-group">
                 <label for="motherName">Mother's Name:</label>
-                <input type="text" id="motherName">
+                <input type="text" id="motherName" name="motherName">
             </div>
 
             <div class="form-group">
                 <label for="motherOccupation">Mother's Occupation:</label>
-                <input type="text" id="motherOccupation">
+                <input type="text" id="motherOccupation" name="motherOccupation">
             </div>
 
             <div class="form-group">
                 <label for="siblings">Siblings:</label>
-                <input type="text" id="siblings" placeholder="e.g., 1, married, lives at Hyderabad">
+                <input type="text" id="siblings" name="siblings" placeholder="e.g., 1, married, lives at Hyderabad">
             </div>
 
             <div class="form-group">
-                <label for="address">Address (Alphabets, numbers, and basic punctuation only):</label>
-                <input type="text" id="address">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
             </div>
 
             <div class="form-group">
                 <label for="contactNo">Contact No:</label>
-                <input type="text" id="contactNo">
+                <input type="text" id="contactNo" name="contactNo" required>
             </div>
 
-            <div class="form-group">
-                <label for="photo">Photo:</label>
-                <input type="file" id="photo" accept="image/*">
-            </div>
+            <!-- Hidden field for time of birth combined -->
+            <input type="hidden" id="timeOfBirth" name="timeOfBirth">
+            <!-- Hidden field for submission timestamp -->
+            <input type="hidden" id="timestamp" name="timestamp">
 
             <div class="button-group">
-                <button type="button" id="generateButton">Generate Biodata</button>
+                <button type="button" id="generateButton">Generate Preview</button>
                 <button type="button" id="downloadButton">Download as JPG</button>
+                <button type="submit" id="submitButton" class="submit-btn">Submit to Database</button>
             </div>
         </form>
     </div>
@@ -655,14 +701,106 @@
     </div>
 </div>
 
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+    // Google Apps Script Web App URL - Replace this with your actual URL
+    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+    
     const uploadedPhotoUrl = 'https://via.placeholder.com/320x420.png?text=Upload+Your+Photo';
     
     document.addEventListener('DOMContentLoaded', function() {
         const previewPhoto = document.getElementById('previewPhoto');
         previewPhoto.src = uploadedPhotoUrl;
         document.getElementById('generateButton').click();
+    });
+
+    // Form submission to Google Sheets
+    document.getElementById('biodataForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitButton = document.getElementById('submitButton');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        // Hide any previous messages
+        successMessage.style.display = 'none';
+        errorMessage.style.display = 'none';
+        
+        // Disable submit button and show loading state
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
+        
+        try {
+            // Prepare form data
+            const formData = new FormData();
+            
+            // Add all form fields
+            const formElements = this.elements;
+            for (let i = 0; i < formElements.length; i++) {
+                const element = formElements[i];
+                if (element.name && element.type !== 'submit' && element.type !== 'button') {
+                    if (element.type === 'file') {
+                        // Handle file upload - convert to base64 if needed
+                        if (element.files && element.files[0]) {
+                            const file = element.files[0];
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                formData.append(element.name, e.target.result);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    } else {
+                        formData.append(element.name, element.value);
+                    }
+                }
+            }
+            
+            // Add combined time of birth
+            const hour = document.getElementById('tobHour').value;
+            const minute = document.getElementById('tobMinute').value;
+            const ampm = document.getElementById('tobAmPm').value;
+            if (hour && minute && ampm) {
+                document.getElementById('timeOfBirth').value = `${hour}:${minute} ${ampm}`;
+            }
+            
+            // Add timestamp
+            document.getElementById('timestamp').value = new Date().toISOString();
+            
+            // Convert FormData to regular object for JSON
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Submit to Google Apps Script
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (response.ok) {
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                // Optionally reset form
+                // this.reset();
+                // document.getElementById('generateButton').click();
+            } else {
+                throw new Error('Network response was not ok');
+            }
+            
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            errorMessage.style.display = 'block';
+            errorMessage.scrollIntoView({ behavior: 'smooth' });
+        } finally {
+            // Re-enable submit button
+            submitButton.disabled = false;
+            submitButton.textContent = 'Submit to Database';
+        }
     });
 
     document.getElementById('generateButton').addEventListener('click', function() {
@@ -765,7 +903,12 @@
             const imgData = canvas.toDataURL('image/jpeg', 1.0);
             const link = document.createElement('a');
             link.href = imgData;
-            link.download = 'biodata.jpg';
+            
+            // Use the person's name for the filename if available
+            const personName = document.getElementById('fullName').value || 'biodata';
+            const fileName = personName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+            link.download = `${fileName}_biodata.jpg`;
+            
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
