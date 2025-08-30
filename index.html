@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Biodata Form</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+        :root {
+            --primary-color: #001f3f; /* Dark Navy Blue */
+            --accent-color: #FF5733; /* Bright Orange for accents */
+            --text-dark: #333;
+            --text-light: #555;
+            --bg-light: #f4f7f9; /* Soft light gray */
+            --card-bg: #ffffff;
+            --border-color: #d1d8e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .form-container, .preview-container {
+            flex: 1;
+            min-width: 450px;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        input:not([type="file"]), textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: var(--text-dark);
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.1);
+            outline: none;
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23001f3f%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.6-6.4H18.8c-5%200-9.3%201.8-12.9%205.8-3.6%204-5.4%209.1-5.4%2014.1%200%205%201.8%209.3%205.4%2013.3l133.9%20139.7c3.6%204%207.8%206%2012.9%206s9.3-2%2012.9-6L287%2096.3c3.5-4%205.3-9.2%205.3-14.2%200-4.9-1.8-9.9-5.3-13.9z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right .7em top 50%;
+            background-size: .65em auto;
+            padding-right: 2.5em;
+        }
+
+        .time-select-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .time-select-group select {
+            width: auto;
+            flex: 1;
+        }
+
+        input[type="file"] {
+            padding: 10px 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #003366;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 31, 63, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Biodata Preview Styles */
+        .biodata-container {
+            width: 850px;
+            height: auto;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border: 5px solid var(--primary-color);
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .download-border {
+            border: 15px solid #001f3f; 
+            border-image: linear-gradient(135deg, #FFD700, #DAA520, #001f3f) 1;
+            box-shadow: 0 0 0 10px #f4f7f9, 0 0 0 15px #001f3f;
+        }
+        
+        .biodata-photo img {
+            width: 320px;
+            height: 420px;
+            border: 5px solid var(--primary-color);
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .biodata-header {
+            text-align: center;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .biodata-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin: 0;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+            font-weight: 700; 
+        }
+
+        .biodata-header .custom-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-top: 3px;
+            text-transform: uppercase;
+            font-weight: 700; 
+        }
+
+        .biodata-header .ganesha-icon {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+
+        .biodata-content {
+            display: grid;
+            grid-template-columns: 1fr 330px; 
+            width: 100%;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .biodata-photo {
+            align-self: start;
+            padding-top: 15px;
+        }
+        
+        .personal-details-section,
+        .family-contact-section {
+            width: 100%;
+        }
+
+        .two-column-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .section-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; 
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            text-align: left;
+            font-weight: 700; 
+        }
+
+        .section-heading:first-of-type {
+            margin-top: 0;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: flex-start;
+        }
+
+        .detail-label {
+            flex-basis: 35%;
+            font-weight: 700; 
+            color: var(--text-dark);
+            text-align: left;
+            padding-right: 15px;
+            white-space: nowrap;
+            font-size: 1.1rem; 
+        }
+
+        .detail-value {
+            flex-basis: 65%;
+            font-weight: 600; 
+            color: var(--text-light);
+            text-align: left;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 1.1rem; 
+        }
+
+        .detail-value pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: 'Poppins', sans-serif;
+            word-break: break-all;
+            font-weight: 600; 
+            font-size: 1.1rem; 
+        }
+        
+        .biodata-details.family-contact {
+            margin-top: 10px;
+        }
+        
+        .qualification-box {
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 31, 63, 0.05);
+        }
+
+        .qualification-box .section-heading {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-weight: 700; 
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-container, .preview-container {
+                width: 100%;
+                min-width: unset;
+                padding: 20px;
+            }
+
+            .biodata-container {
+                width: 100%;
+                padding: 25px 20px;
+                border: 3px solid var(--primary-color);
+            }
+
+            .biodata-content {
+                grid-template-columns: 1fr;
+            }
+
+            .biodata-photo {
+                width: 60%;
+                margin: 0 auto;
+                padding-top: 0;
+            }
+
+            .biodata-photo img {
+                max-width: 100%;
+                height: auto;
+            }
+            
+            .two-column-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .biodata-details, .qualification-box {
+                padding-top: 15px;
+            }
+
+            .biodata-header h1 {
+                font-size: 1.8rem;
+            }
+            .biodata-header .custom-heading {
+                font-size: 1.2rem;
+            }
+            .section-heading {
+                font-size: 1.5rem;
+            }
+            .detail-label, .detail-value {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="form-container">
+        <h2>Biodata Form</h2>
+        <form id="biodataForm">
+            <div class="form-group">
+                <label for="caste">Caste:</label>
+                <select id="caste">
+                    <option value="">Select Caste</option>
+                    <option value="Reddy">Reddy</option>
+                    <option value="Kamma">Kamma</option>
+                    <option value="Kapu">Kapu</option>
+                    <option value="Vishwabrahmana">Vishwabrahmana</option>
+                    <option value="Brahmin">Brahmin</option>
+                    <option value="Kshatriya">Kshatriya</option>
+                    <option value="Vysya">Vysya</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName">
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob">
+            </div>
+
+            <div class="form-group">
+                <label>Time of Birth:</label>
+                <div class="time-select-group">
+                    <select id="tobHour">
+                        <option value="">Hour</option>
+                        <script>
+                            for (let i = 1; i <= 12; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                    <select id="tobMinute">
+                        <option value="">Minute</option>
+                        <script>
+                            for (let i = 0; i < 60; i++) {
+                                const minute = i < 10 ? '0' + i : i;
+                                document.write(`<option value="${minute}">${minute}</option>`);
+                            }
+                        </script>
+                    </select>
+                    <select id="tobAmPm">
+                        <option value="">AM/PM</option>
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="pob">Place of Birth:</label>
+                <input type="text" id="pob">
+            </div>
+
+            <div class="form-group">
+                <label for="rashiCombined">Rashi:</label>
+                <select id="rashiCombined">
+                    <option value="">Select Rashi</option>
+                    <option value="Aries (Mesha) / మేషం">Aries (Mesha) / మేషం</option>
+                    <option value="Taurus (Vrushabha) / వృషభం">Taurus (Vrushabha) / వృషభం</option>
+                    <option value="Gemini (Mithuna) / మిథునం">Gemini (Mithuna) / మిథునం</option>
+                    <option value="Cancer (Karkataka) / కర్కాటకం">Cancer (Karkataka) / కర్కాటకం</option>
+                    <option value="Leo (Simha) / సింహం">Leo (Simha) / సింహం</option>
+                    <option value="Virgo (Kanya) / కన్య">Virgo (Kanya) / కన్య</option>
+                    <option value="Libra (Tula) / తుల">Libra (Tula) / తుల</option>
+                    <option value="Scorpio (Vrushchika) / వృశ్చికం">Scorpio (Vrushchika) / వృశ్చికం</option>
+                    <option value="Sagittarius (Dhanussu) / ధనుస్సు">Sagittarius (Dhanussu) / ధనుస్సు</option>
+                    <option value="Capricorn (Makara) / మకరం">Capricorn (Makara) / మకరం</option>
+                    <option value="Aquarius (Kumbha) / కుంభం">Aquarius (Kumbha) / కుంభం</option>
+                    <option value="Pisces (Meena) / మీనం">Pisces (Meena) / మీనం</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nakshatraCombined">Nakshatra:</label>
+                <select id="nakshatraCombined">
+                    <option value="">Select Nakshatra</option>
+                    <option value="Ashwini (అశ్విని)">Ashwini (అశ్విని)</option>
+                    <option value="Bharani (భరణి)">Bharani (భరణి)</option>
+                    <option value="Krutthika (కృత్తిక)">Krutthika (కృత్తిక)</option>
+                    <option value="Rohini (రోహిణి)">Rohini (రోహిణి)</option>
+                    <option value="Mrigashira (మృగశిర)">Mrigashira (మృగశిర)</option>
+                    <option value="Ardra (ఆర్ద్ర)">Ardra (ఆర్ద్ర)</option>
+                    <option value="Punarvasu (పునర్వసు)">Punarvasu (పునర్వసు)</option>
+                    <option value="Pushyami (పుష్యమి)">Pushyami (పుష్యమి)</option>
+                    <option value="Ashlesha (ఆశ్లేష)">Ashlesha (ఆశ్లేష)</option>
+                    <option value="Magha (మఖ)">Magha (మఖ)</option>
+                    <option value="Purva Phalguni (పుబ్బ)">Purva Phalguni (పుబ్బ)</option>
+                    <option value="Uttara Phalguni (ఉత్తర)">Uttara Phalguni (ఉత్తర)</option>
+                    <option value="Hasta (హస్త)">Hasta (హస్త)</option>
+                    <option value="Chitra (చిత్త)">Chitra (చిత్త)</option>
+                    <option value="Swati (స్వాతి)">Swati (స్వాతి)</option>
+                    <option value="Vishakha (విశాఖ)">Vishakha (విశాఖ)</option>
+                    <option value="Anuradha (అనురాధ)">Anuradha (అనురాధ)</option>
+                    <option value="Jyeshtha (జ్యేష్ఠ)">Jyeshtha (జ్యేష్ఠ)</option>
+                    <option value="Moola (మూల)">Moola (మూల)</option>
+                    <option value="Poorvashada (పూర్వాషాఢ)">Poorvashada (పూర్వాషాఢ)</option>
+                    <option value="Uttara Ashadha (ఉత్తరాషాఢ)">Uttara Ashadha (ఉత్తరాషాఢ)</option>
+                    <option value="Shravana (శ్రవణం)">Shravana (శ్రవణం)</option>
+                    <option value="Dhanishta (ధనిష్ట)">Dhanishta (ధనిష్ట)</option>
+                    <option value="Shatabhisha (శతభిషం)">Shatabhisha (శతభిషం)</option>
+                    <option value="Poorvabhadra (పూర్వాభాద్ర)">Poorvabhadra (పూర్వాభాద్ర)</option>
+                    <option value="Uttarabhadra (ఉత్తరాభాద్ర)">Uttarabhadra (ఉత్తరాభాద్ర)</option>
+                    <option value="Revati (రేవతి)">Revati (రేవతి)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="gotra">Gotra:</label>
+                <input type="text" id="gotra">
+            </div>
+
+            <div class="form-group">
+                <label for="height">Height:</label>
+                <select id="height">
+                    <option value="">Select Height</option>
+                    <script>
+                        for (let feet = 4; feet <= 7; feet++) {
+                            for (let inches = 0; inches <= 11; inches++) {
+                                if (feet === 7 && inches > 0) break;
+                                const heightText = `${feet} ft. ${inches} in.`;
+                                document.write(`<option value="${heightText}">${heightText}</option>`);
+                            }
+                        }
+                    </script>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="complexion">Complexion:</label>
+                <select id="complexion">
+                    <option value="">Select Complexion</option>
+                    <option value="Very Fair">Very Fair</option>
+                    <option value="Fair">Fair</option>
+                    <option value="Wheatish">Wheatish</option>
+                    <option value="Dark">Dark</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="education">Education:</label>
+                <input type="text" id="education">
+            </div>
+
+            <div class="form-group">
+                <label for="jobDetails">Job Details:</label>
+                <textarea id="jobDetails" rows="3" placeholder="e.g., Global Clinical Operations Specialist, Clinical Trials"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="jobLocation">Job Location:</label>
+                <input type="text" id="jobLocation" placeholder="e.g., Hyderabad, India">
+            </div>
+
+            <div class="form-group">
+                <label for="salary">Salary (LPA):</label>
+                <select id="salary">
+                    <option value="">Select Salary</option>
+                    <script>
+                        for (let i = 3; i <= 20; i++) {
+                            document.write(`<option value="${i} LPA">${i} LPA</option>`);
+                        }
+                    </script>
+                    <option value="20+ LPA">20+ LPA</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="requiredQualities">Required Qualities:</label>
+                <textarea id="requiredQualities" rows="3" placeholder="e.g., Should be a working professional, Good family background"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="fatherName">Father's Name:</label>
+                <input type="text" id="fatherName">
+            </div>
+
+            <div class="form-group">
+                <label for="fatherOccupation">Father's Occupation:</label>
+                <input type="text" id="fatherOccupation">
+            </div>
+
+            <div class="form-group">
+                <label for="motherName">Mother's Name:</label>
+                <input type="text" id="motherName">
+            </div>
+
+            <div class="form-group">
+                <label for="motherOccupation">Mother's Occupation:</label>
+                <input type="text" id="motherOccupation">
+            </div>
+
+            <div class="form-group">
+                <label for="siblings">Siblings:</label>
+                <input type="text" id="siblings" placeholder="e.g., 1, married, lives at Hyderabad">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address (Alphabets, numbers, and basic punctuation only):</label>
+                <input type="text" id="address">
+            </div>
+
+            <div class="form-group">
+                <label for="contactNo">Contact No:</label>
+                <input type="text" id="contactNo">
+            </div>
+
+            <div class="form-group">
+                <label for="photo">Photo:</label>
+                <input type="file" id="photo" accept="image/*">
+            </div>
+
+            <div class="button-group">
+                <button type="button" id="generateButton">Generate Biodata</button>
+                <button type="button" id="downloadButton">Download as JPG</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="preview-container">
+        <div id="biodataPreview">
+            <div class="biodata-container">
+                <div class="biodata-header">
+                    <img src="https://www.pngarts.com/files/2/Ganesh-PNG-High-Quality-Image.png" alt="Ganesha Icon" class="ganesha-icon">
+                    <h1>|| SHREE GANESHAYA NAMAH ||</h1>
+                    <div id="customHeadingPreview" class="custom-heading" style="display:none;"></div>
+                </div>
+
+                <div class="biodata-content">
+                    <div class="biodata-details">
+                        <div class="section-heading">BIODATA</div>
+                        <div class="detail-row"><span class="detail-label">Full Name</span><span class="detail-value" id="previewName">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Gender</span><span class="detail-value" id="previewGender">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Date of Birth</span><span class="detail-value" id="previewDob">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Time of Birth</span><span class="detail-value" id="previewTob">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Place of Birth</span><span class="detail-value" id="previewPob">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Rashi</span><span class="detail-value" id="previewRashi">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Nakshatra</span><span class="detail-value" id="previewNakshatra">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Caste</span><span class="detail-value" id="previewCaste">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Gotra</span><span class="detail-value" id="previewGotra">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Height</span><span class="detail-value" id="previewHeight">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Complexion</span><span class="detail-value" id="previewComplexion">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Education</span><span class="detail-value" id="previewEducation">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Job Details</span><span class="detail-value" id="previewJobDetails"><pre></pre></span></div>
+                        <div class="detail-row"><span class="detail-label">Job Location</span><span class="detail-value" id="previewJobLocation">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Salary (LPA)</span><span class="detail-value" id="previewSalary">:</span></div>
+                    </div>
+                    
+                    <div class="biodata-photo">
+                        <img id="previewPhoto" src="https://via.placeholder.com/320x420.png?text=Upload+Your+Photo" alt="Your Photo">
+                    </div>
+                </div>
+
+                <div class="biodata-details family-contact">
+                    <div class="section-heading">FAMILY DETAILS</div>
+                    <div class="detail-row"><span class="detail-label">Father's Name</span><span class="detail-value" id="previewFatherName">:</span></div>
+                    <div class="detail-row"><span class="detail-label">Occupation</span><span class="detail-value" id="previewFatherOccupation">:</span></div>
+                    <div class="detail-row"><span class="detail-label">Mother's Name</span><span class="detail-value" id="previewMotherName">:</span></div>
+                    <div class="detail-row"><span class="detail-label">Occupation</span><span class="detail-value" id="previewMotherOccupation">:</span></div>
+                    <div class="detail-row"><span class="detail-label">Siblings</span><span class="detail-value" id="previewSiblings">:</span></div>
+                </div>
+                
+                <div class="two-column-layout">
+                    <div class="biodata-details">
+                        <div class="section-heading">CONTACT DETAILS</div>
+                        <div class="detail-row"><span class="detail-label">Address</span><span class="detail-value" id="previewAddress">:</span></div>
+                        <div class="detail-row"><span class="detail-label">Contact No.</span><span class="detail-value" id="previewContactNo">:</span></div>
+                    </div>
+                    
+                    <div class="qualification-box">
+                        <div class="section-heading">REQUIRED QUALITIES</div>
+                        <div class="detail-row"><span class="detail-value" id="previewRequiredQualities"><pre></pre></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    const uploadedPhotoUrl = 'https://via.placeholder.com/320x420.png?text=Upload+Your+Photo';
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const previewPhoto = document.getElementById('previewPhoto');
+        previewPhoto.src = uploadedPhotoUrl;
+        document.getElementById('generateButton').click();
+    });
+
+    document.getElementById('generateButton').addEventListener('click', function() {
+        const casteValue = document.getElementById('caste').value;
+        const customHeadingPreview = document.getElementById('customHeadingPreview');
+        if (casteValue) {
+            customHeadingPreview.textContent = 'FOR ' + casteValue.toUpperCase() + ' CASTE';
+            customHeadingPreview.style.display = 'block';
+        } else {
+            customHeadingPreview.style.display = 'none';
+        }
+
+        document.getElementById('previewName').textContent = ': ' + (document.getElementById('fullName').value || 'N/A');
+        document.getElementById('previewGender').textContent = ': ' + (document.getElementById('gender').value || 'N/A');
+        
+        const dobInput = document.getElementById('dob').value;
+        if (dobInput) {
+            const [year, month, day] = dobInput.split('-');
+            document.getElementById('previewDob').textContent = `: ${day}/${month}/${year}`;
+        } else {
+            document.getElementById('previewDob').textContent = ': N/A';
+        }
+        
+        const tobHour = document.getElementById('tobHour').value;
+        const tobMinute = document.getElementById('tobMinute').value;
+        const tobAmPm = document.getElementById('tobAmPm').value;
+        let tobValue = 'N/A';
+        if (tobHour && tobMinute && tobAmPm) {
+            tobValue = `${tobHour}:${tobMinute} ${tobAmPm}`;
+        }
+        document.getElementById('previewTob').textContent = ': ' + tobValue;
+        document.getElementById('previewPob').textContent = ': ' + (document.getElementById('pob').value || 'N/A');
+        const rashiCombined = document.getElementById('rashiCombined').value;
+        document.getElementById('previewRashi').textContent = ': ' + (rashiCombined || 'N/A');
+        const nakshatraCombined = document.getElementById('nakshatraCombined').value;
+        document.getElementById('previewNakshatra').textContent = ': ' + (nakshatraCombined || 'N/A');
+        document.getElementById('previewCaste').textContent = ': ' + (document.getElementById('caste').value || 'N/A');
+        document.getElementById('previewGotra').textContent = ': ' + (document.getElementById('gotra').value || 'N/A');
+        const heightValue = document.getElementById('height').value;
+        document.getElementById('previewHeight').textContent = ': ' + (heightValue || 'N/A');
+        const complexionValue = document.getElementById('complexion').value;
+        document.getElementById('previewComplexion').textContent = ': ' + (complexionValue || 'N/A');
+        document.getElementById('previewEducation').textContent = ': ' + (document.getElementById('education').value || 'N/A');
+        
+        document.querySelector('#previewJobDetails pre').textContent = (document.getElementById('jobDetails').value || 'N/A');
+        
+        document.getElementById('previewJobLocation').textContent = ': ' + (document.getElementById('jobLocation').value || 'N/A');
+        
+        const salaryValue = document.getElementById('salary').value;
+        document.getElementById('previewSalary').textContent = ': ' + (salaryValue || 'N/A');
+
+        document.querySelector('#previewRequiredQualities pre').textContent = (document.getElementById('requiredQualities').value || 'N/A');
+        
+        document.getElementById('previewFatherName').textContent = ': ' + (document.getElementById('fatherName').value || 'N/A');
+        document.getElementById('previewFatherOccupation').textContent = ': ' + (document.getElementById('fatherOccupation').value || 'N/A');
+        document.getElementById('previewMotherName').textContent = ': ' + (document.getElementById('motherName').value || 'N/A');
+        document.getElementById('previewMotherOccupation').textContent = ': ' + (document.getElementById('motherOccupation').value || 'N/A');
+        document.getElementById('previewSiblings').textContent = ': ' + (document.getElementById('siblings').value || 'N/A');
+
+        const addressInput = document.getElementById('address');
+        const addressValue = addressInput.value;
+        const allowedAddress = addressValue.replace(/[^a-zA-Z0-9\s,./-]/g, '');
+        if (addressValue !== allowedAddress) {
+            alert('Address field contains unsupported characters. Only alphabets, numbers, spaces, commas, periods, hyphens, and slashes are allowed.');
+            addressInput.value = allowedAddress;
+        }
+        document.getElementById('previewAddress').textContent = ': ' + (allowedAddress || 'N/A');
+        document.getElementById('previewContactNo').textContent = ': ' + (document.getElementById('contactNo').value || 'N/A');
+
+        const photoInput = document.getElementById('photo');
+        const previewPhoto = document.getElementById('previewPhoto');
+        if (photoInput.files && photoInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewPhoto.src = e.target.result;
+                previewPhoto.style.objectFit = 'cover';
+                previewPhoto.style.objectPosition = 'center';
+            };
+            reader.readAsDataURL(photoInput.files[0]);
+        } else {
+            previewPhoto.src = uploadedPhotoUrl;
+            previewPhoto.style.objectFit = 'cover';
+            previewPhoto.style.objectPosition = 'center';
+        }
+    });
+
+    document.getElementById('downloadButton').addEventListener('click', function() {
+        const biodataContainer = document.querySelector('.biodata-container');
+        
+        biodataContainer.classList.add('download-border');
+
+        html2canvas(biodataContainer, {
+            scale: 8, 
+            useCORS: true,
+            allowTaint: true,
+            logging: true,
+        }).then(canvas => {
+            biodataContainer.classList.remove('download-border');
+
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'biodata.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    });
+</script>
+
+</body>
+</html>
